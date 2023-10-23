@@ -1,5 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'login.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -14,6 +16,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
+  void _navigateToLoginScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +30,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         title: Text('Registration'),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 100.0, horizontal: 50.0),
+        padding: EdgeInsets.symmetric(vertical: 80.0, horizontal: 50.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -99,6 +108,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 child: Text('Register'),
               ),
             ),
+            SizedBox(height: 20),
+            Center(
+              child: RichText(
+                text: TextSpan(
+                  text: 'Already have an account? ',
+                  style: TextStyle(color: Colors.black),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Log in',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()..onTap = _navigateToLoginScreen,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
           ],
         ),
       ),
