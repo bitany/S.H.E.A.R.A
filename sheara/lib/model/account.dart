@@ -3,7 +3,6 @@ final String accountsTable = 'accounts';
 
 class accountsFields {
   static final List<String> values = [
-    /// Add all fields
     id, password, isAuthenticated, sidnumber, eidnumber, firstname, lastname, dispname, time
   ];
 
