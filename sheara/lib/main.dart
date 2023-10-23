@@ -10,6 +10,7 @@ void main() async {
   await database.database;
 
   final trial = account(
+    password: 'xdding',
     isAuthenticated: true,
     sidnumber: 201902151,
     eidnumber: 0,
