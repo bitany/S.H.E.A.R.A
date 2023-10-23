@@ -22,24 +22,26 @@ class account {
   final int? id;
   final String password;
   final bool isAuthenticated;
-  final int sidnumber;
-  final int eidnumber;
   final String firstname;
   final String lastname;
   final String dispname;
   final DateTime timeCreated;
 
+  final int? sidnumber;
+  final int? eidnumber;
+
   const account({
     this.id,
     required this.password,
     required this.isAuthenticated,
-    required this.sidnumber,
-    required this.eidnumber,
     required this.firstname,
     required this.lastname,
     required this.dispname,
     required this.timeCreated,
-  });
+
+    this.sidnumber,
+    this.eidnumber,
+  }): assert((sidnumber == null && eidnumber != null) || (sidnumber != null && eidnumber == null));
 
   account copy({
     int? id,

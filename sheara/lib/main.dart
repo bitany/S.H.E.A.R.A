@@ -1,40 +1,58 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:flutter/widgets.dart';
-import '../database/accountsDatabase.dart';
-import '../model/account.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'registration.dart';
+import 'login.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final database = accountsDatabase.instance;
+void main() => runApp(MaterialApp(home: MyApp()));
 
-  await database.database;
-
-  final trial = account(
-    password: 'xdding',
-    isAuthenticated: true,
-    sidnumber: 201902151,
-    eidnumber: 0,
-    firstname: 'Hadjie',
-    lastname: 'Bernales',
-    dispname: 'Boang',
-    timeCreated: DateTime.now(),
-  );
-
-  final createdAccount = await database.create(trial);
-  print('Created Account: $createdAccount');
-
-  final retrievedAccount = await database.viewAccount(createdAccount.id!);
-  print('Retrieved Account: $retrievedAccount');
-
-  final updatedAccount = retrievedAccount.copy(firstname: 'Jane');
-  final rowsAffected = await database.update(updatedAccount);
-  print('Rows Updated: $rowsAffected');
-
-  final accountAfterUpdate = await database.viewAccount(updatedAccount.id!);
-  print('Account After Update: $accountAfterUpdate');
-
-  final rowsDeleted = await database.delete(accountAfterUpdate.id!);
-  print('Rows Deleted: $rowsDeleted');
-
-  await database.close();
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Register/Login Page'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegistrationScreen()),
+                  );
+                },
+                child: Text('Register'),
+              ),
+              SizedBox(height: 20),
+              RichText(
+                text: TextSpan(
+                  text: 'Already have an account? ',
+                  style: TextStyle(color: Colors.black),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Log in',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                          );
+                        },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

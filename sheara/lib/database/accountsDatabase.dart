@@ -45,6 +45,11 @@ class accountsDatabase {
   }
 
   Future<account> create(account account) async {
+    if ((account.sidnumber != null && account.eidnumber != null) ||
+        (account.sidnumber == null && account.eidnumber == null)) {
+      throw Exception('An account must have either sidnumber or eidnumber.');
+    }
+
     final db = await instance.database;
     final id = await db.insert(accountsTable, account.toJson());
     return account.copy(id: id);
@@ -67,6 +72,11 @@ class accountsDatabase {
   }
 
   Future<int> update(account account) async {
+    if ((account.sidnumber != null && account.eidnumber != null) ||
+        (account.sidnumber == null && account.eidnumber == null)) {
+      throw Exception('An account must have either sidnumber or eidnumber.');
+    }
+
     final db = await instance.database;
 
     return db.update(
