@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'registration.dart';
 import '../model/account.dart';
 import '../database/accountsDatabase.dart';
 
@@ -24,43 +25,29 @@ class _LoginScreenState extends State<LoginScreen> {
     String password = _passwordController.text;
 
     if (idx.isEmpty || password.isEmpty) {
-      _showSnackBar('Please fill out all the required fields.');
+      _showSnackBar('Please fill out all the fields.');
       return;
     }
 
-    int? id;
-    String userType;
+    int? idNumber;
+    idNumber = int.tryParse(idx);
 
-    if (_selectedUserType == 'Student') {
-      userType = 'Student';
-      id = int.tryParse(idx);
-
-      if (id == null || id <= 0) {
-        _showSnackBar('Invalid Student ID number.');
-        return;
-      }
-    } else {
-      userType = 'Employee';
-      id = int.tryParse(idx);
-
-      if (id == null || id <= 0) {
-        _showSnackBar('Invalid Employee ID number.');
-        return;
-      }
+    if (idNumber == null || idNumber <= 0) {
+      _showSnackBar('Invalid ID number. Please try again.');
+      return;
     }
 
-    try {
-      account? userAccount = await accountsDatabase.instance.getAccountByIdAndType(id, userType);
+    bool isStudent = _selectedUserType == 'Student';
 
-      if (userAccount != null && userAccount.password == password) {
-        _showSnackBar('Login successful!');
-      } else {
-        _showSnackBar('Incorrect ID or password. Please try again.');
-      }
-    } catch (e) {
-      _showSnackBar('Error occurred while logging in. Please try again later.');
+    account? existingAccount = await accountsDatabase.instance.getAccount(idNumber, isStudent, password);
+
+    if (existingAccount != null) {
+      _showSnackBar('Login successful! Welcome, ${existingAccount.dispname}!');
+    } else {
+      _showSnackBar('Invalid credentials. Please try again.');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +67,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: _selectedUserType == 'Student'
-                      ? 'Enter Student ID'
-                      : 'Enter Employee ID',
+                      ? 'Student ID'
+                      : 'Employee ID',
                 ),
               ),
               SizedBox(height: 20),
@@ -89,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  labelText: 'Enter Password',
+                  labelText: 'Password',
                 ),
               ),
               SizedBox(height: 20),
@@ -131,6 +118,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: _performLogin,
                   child: Text('Login'),
+                ),
+              ),
+              SizedBox(height: 10),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Don't have an account? ", style: TextStyle(color: Colors.black),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegistrationScreen()),
+                        );
+                      },
+                      child: Text("Register",style: TextStyle(color: Colors.blue,),),
+                    ),
+                  ],
                 ),
               ),
             ],

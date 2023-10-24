@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../model/account.dart';
 import 'accountsDatabase.dart';
+import '../model/account.dart';
 
 class AccountEditScreen extends StatefulWidget {
   final account accountToEdit;
@@ -72,7 +72,6 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
               },
               child: Text('Save'),
             ),
-
           ],
         ),
       ),

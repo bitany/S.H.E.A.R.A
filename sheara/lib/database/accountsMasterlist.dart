@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../model/account.dart';
-import 'accountsDatabase.dart';
 import 'accountEdit.dart';
+import 'accountsDatabase.dart';
+import '../model/account.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,7 +35,7 @@ class _AccountsMasterlistState extends State<AccountsMasterlist> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Accounts Masterlist'),
+        title: Text('Accounts List'),
       ),
       body: FutureBuilder<List<account>>(
         future: accountsDatabase.instance.getAllAccounts(),
@@ -45,9 +45,6 @@ class _AccountsMasterlistState extends State<AccountsMasterlist> {
             return ListView.builder(
               itemCount: accounts.length,
               itemBuilder: (context, index) {
-                String idLabel = accounts[index].sidnumber != null ? 'Student ID' : 'Employee ID';
-                int? idNumber = accounts[index].sidnumber != null ? accounts[index].sidnumber : accounts[index].eidnumber;
-
                 String authenticatedStatus = accounts[index].isAuthenticated ? 'Authenticated' : 'Not Authenticated';
                 return ListTile(
                   leading: Icon(Icons.account_circle),
@@ -55,7 +52,7 @@ class _AccountsMasterlistState extends State<AccountsMasterlist> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('ID: ${accounts[index].id}'),
-                      Text('User: ${accounts[index].dispname}'),
+                      Text('${accounts[index].dispname}'),
                       Text(authenticatedStatus),
                     ],
                   ),
@@ -63,7 +60,6 @@ class _AccountsMasterlistState extends State<AccountsMasterlist> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Name: ${accounts[index].firstname} ${accounts[index].lastname}'),
-                      if (idNumber != null) Text('$idLabel: $idNumber'),
                       Text('Definitely not the password: ${accounts[index].password}'),
                       Text('Account Creation Date: ${accounts[index].timeCreated}'),
                       Column(

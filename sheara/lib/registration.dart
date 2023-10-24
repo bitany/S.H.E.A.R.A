@@ -11,8 +11,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  String _selectedUserType = 'Student'; // Default user type
-
+  bool _isStudent = true;
   TextEditingController _idxController = TextEditingController();
   TextEditingController _displayNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -42,16 +41,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 controller: _idxController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: _selectedUserType == 'Student'
-                      ? 'Enter Student ID'
-                      : 'Enter Employee ID',
+                  labelText: _isStudent ? 'Student ID' : 'Employee ID',
                 ),
               ),
               SizedBox(height: 20),
               TextField(
                 controller: _displayNameController,
                 decoration: InputDecoration(
-                  labelText: 'Enter Name',
+                  labelText: 'Name',
                 ),
               ),
               SizedBox(height: 20),
@@ -59,7 +56,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  labelText: 'Enter Password',
+                  labelText: 'Password',
                 ),
               ),
               SizedBox(height: 20),
@@ -76,11 +73,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Column(
                     children: [
                       Radio(
-                        value: 'Student',
-                        groupValue: _selectedUserType,
+                        value: true,
+                        groupValue: _isStudent,
                         onChanged: (value) {
                           setState(() {
-                            _selectedUserType = value.toString();
+                            _isStudent = value as bool;
                           });
                         },
                       ),
@@ -90,11 +87,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Column(
                     children: [
                       Radio(
-                        value: 'Employee',
-                        groupValue: _selectedUserType,
+                        value: false,
+                        groupValue: _isStudent,
                         onChanged: (value) {
                           setState(() {
-                            _selectedUserType = value.toString();
+                            _isStudent = value as bool;
                           });
                         },
                       ),
@@ -111,36 +108,30 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     String displayName = _displayNameController.text;
                     String password = _passwordController.text;
                     String confirmPassword = _confirmPasswordController.text;
+                    int? idNumber;
+                    idNumber = int.parse(idx);
 
                     if (idx.isEmpty || displayName.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill out all the required fields.')));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill out all the fields.')));
+                      return;
+                    }
+
+                    if ((idNumber == null) || (idNumber <= 0)) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invalid ID number.')));
                       return;
                     }
 
                     if (password != confirmPassword) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sorry, the two passwords you entered do not match.')));
-                      return;
-                    }
-
-                    int? sidNumber;
-                    int? eidNumber;
-                    if (_selectedUserType == 'Student') {
-                      sidNumber = int.parse(idx);
-                    } else if (_selectedUserType == 'Employee') {
-                      eidNumber = int.parse(idx);
-                    }
-
-                    if ((sidNumber == null && eidNumber == null) || (sidNumber != null && sidNumber <= 0) || (eidNumber != null && eidNumber <= 0)) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sorry, your ID number is invalid.')));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('The passwords do not match. Please try again.')));
                       return;
                     }
 
                     account newAccount = account(
-                      sidnumber: sidNumber,
-                      eidnumber: eidNumber,
+                      idNumber: idNumber,
                       dispname: displayName,
                       password: password,
                       isAuthenticated: false,
+                      isStudent: _isStudent,
                       timeCreated: DateTime.now(),
                     );
 

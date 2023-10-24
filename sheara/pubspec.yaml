@@ -39,7 +39,7 @@ dependencies:
   sqflite: ^2.0.0+3
 
   # Password encryptions
-  bcrypt: ^1.1.3
+  bcrypt: any
 
 dev_dependencies:
   flutter_test:

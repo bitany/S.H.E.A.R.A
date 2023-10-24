@@ -42,8 +42,8 @@ class accountsDatabase {
       ${accountsFields.id} $idType, 
       ${accountsFields.password} $textType, 
       ${accountsFields.isAuthenticated} $boolType,
-      ${accountsFields.sidnumber} $integerType UNIQUE,
-      ${accountsFields.eidnumber} $integerType UNIQUE,
+      ${accountsFields.isStudent} $boolType,
+      ${accountsFields.idNumber} $integerType UNIQUE,
       ${accountsFields.firstname} $textType,
       ${accountsFields.lastname} $textType,
       ${accountsFields.dispname} $textType,
@@ -52,20 +52,16 @@ class accountsDatabase {
   ''');
   }
 
-
   Future<account> create(account account) async {
-    if ((account.sidnumber != null && account.eidnumber != null) ||
-        (account.sidnumber == null && account.eidnumber == null)) {
-      throw Exception('An account must have either sidnumber or eidnumber.');
-    }
-
     final db = await instance.database;
     final id = await db.insert(accountsTable, account.toJson());
+
     return account.copy(id: id);
   }
 
   Future<account> viewAccount(int id) async {
     final db = await instance.database;
+
     final maps = await db.query(
       accountsTable,
       columns: accountsFields.values,
@@ -80,37 +76,24 @@ class accountsDatabase {
     }
   }
 
-  Future<account?> getAccountByIdAndType(int id, String userType) async {
+  Future<account?> getAccount(int idNumber, bool isStudent, String password) async {
     final db = await instance.database;
 
-    // Determine the correct column based on the user type
-    String idColumn = (userType == 'Student') ? accountsFields.sidnumber : accountsFields.eidnumber;
+    final List<Map<String, dynamic>> maps = await db.query(
+      accountsTable,
+      columns: accountsFields.values,
+      where: '${accountsFields.idNumber} = ? AND ${accountsFields.isStudent} = ? AND ${accountsFields.password} = ?',
+      whereArgs: [idNumber, isStudent ? 1 : 0, password],
+    );
 
-    try {
-      final List<Map<String, dynamic>> maps = await db.query(
-        accountsTable,
-        columns: accountsFields.values,
-        where: '$idColumn = ? AND $idColumn IS NOT NULL',
-        whereArgs: [id],
-      );
-
-      if (maps.isNotEmpty) {
-        return account.fromJson(maps.first);
-      } else {
-        return null;
-      }
-    } catch (e) {
-      print('Error in getAccountByIdAndType: $e');
-      throw Exception('Error occurred while fetching account information.');
+    if (maps.isNotEmpty) {
+      return account.fromJson(maps.first);
+    } else {
+      return null;
     }
   }
 
   Future<int> update(account account) async {
-    if ((account.sidnumber != null && account.eidnumber != null) ||
-        (account.sidnumber == null && account.eidnumber == null)) {
-      throw Exception('An account must have either sidnumber or eidnumber.');
-    }
-
     final db = await instance.database;
 
     return db.update(
@@ -152,8 +135,8 @@ class accountsDatabase {
         id: maps[i][accountsFields.id],
         password: maps[i][accountsFields.password],
         isAuthenticated: maps[i][accountsFields.isAuthenticated] == 1,
-        sidnumber: maps[i][accountsFields.sidnumber],
-        eidnumber: maps[i][accountsFields.eidnumber],
+        isStudent: maps[i][accountsFields.isStudent] == 1,
+        idNumber: maps[i][accountsFields.idNumber],
         firstname: maps[i][accountsFields.firstname],
         lastname: maps[i][accountsFields.lastname],
         dispname: maps[i][accountsFields.dispname],
