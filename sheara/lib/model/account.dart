@@ -19,27 +19,26 @@ class accountsFields {
 
 class account {
   final int? id;
-  final String password;
-  final bool isAuthenticated;
-  final String firstname;
-  final String lastname;
-  final String dispname;
+  String password;
+  bool isAuthenticated;
+  int? sidnumber;
+  int? eidnumber;
+  String firstname;
+  String lastname;
+  String dispname;
   final DateTime timeCreated;
 
-  final int? sidnumber;
-  final int? eidnumber;
-
-  const account({
+  account({
     this.id,
     required this.password,
     required this.isAuthenticated,
-    required this.firstname,
-    required this.lastname,
+    this.sidnumber,
+    this.eidnumber,
+    this.firstname = '',
+    this.lastname = '',
     required this.dispname,
     required this.timeCreated,
 
-    this.sidnumber,
-    this.eidnumber,
   }): assert((sidnumber == null && eidnumber != null) || (sidnumber != null && eidnumber == null));
 
   account copy({
