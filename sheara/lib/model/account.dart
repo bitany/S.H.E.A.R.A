@@ -3,7 +3,7 @@ final String accountsTable = 'accounts';
 
 class accountsFields {
   static final List<String> values = [
-    id, password, isAuthenticated, isStudent,  idNumber, firstname, lastname, dispname, time
+    id, password, isAuthenticated, isStudent,  idNumber, firstname, lastname, dispname, time, lastSeenLocation, lastSeenTime, needsHelp
   ];
   static final String id = '_id';
   static final String password = 'password';
@@ -14,6 +14,9 @@ class accountsFields {
   static final String lastname = 'lastname';
   static final String dispname = 'displayName';
   static final String time = 'time';
+  static final String lastSeenLocation = 'lastSeenLocation';
+  static final String lastSeenTime = 'lastSeenTime';
+  static final String needsHelp = 'needsHelp';
 }
 
 class account {
@@ -26,6 +29,17 @@ class account {
   String lastname;
   String dispname;
   final DateTime timeCreated;
+  String lastSeenLocation;
+  DateTime lastSeenTime;
+  bool needsHelp;
+
+  void updateLocation(String newLocation) {
+    lastSeenLocation = newLocation;
+  }
+
+  void updateLastSeenTime() {
+    lastSeenTime = DateTime.now();
+  }
 
   account({
     this.id,
@@ -37,6 +51,9 @@ class account {
     this.lastname = '',
     required this.dispname,
     required this.timeCreated,
+    required this.lastSeenLocation,
+    required this.lastSeenTime,
+    required this.needsHelp,
 
   });
 
@@ -50,6 +67,9 @@ class account {
     String? lastname,
     String? dispname,
     DateTime? timeCreated,
+    String? lastSeenLocation,
+    DateTime? lastSeenTime,
+    bool? needsHelp,
   }) =>
     account(
       id: id ?? this.id,
@@ -61,6 +81,9 @@ class account {
       lastname: lastname ?? this.lastname,
       dispname: dispname ?? this.dispname,
       timeCreated: timeCreated ?? this.timeCreated,
+      lastSeenLocation: lastSeenLocation ?? this.lastSeenLocation,
+      lastSeenTime: lastSeenTime ?? this.lastSeenTime,
+      needsHelp: needsHelp ?? this.needsHelp,
     );
 
   static account fromJson(Map<String, Object?> json) => account(
@@ -73,6 +96,9 @@ class account {
     lastname: json[accountsFields.lastname] as String,
     dispname: json[accountsFields.dispname] as String,
     timeCreated: DateTime.parse(json[accountsFields.time] as String),
+    lastSeenLocation: json[accountsFields.lastSeenLocation] as String,
+    lastSeenTime: DateTime.parse(json[accountsFields.lastSeenTime] as String),
+    needsHelp: json[accountsFields.needsHelp] == 0,
   );
 
   Map<String, Object?> toJson() => {
@@ -85,5 +111,8 @@ class account {
     accountsFields.lastname: lastname,
     accountsFields.dispname: dispname,
     accountsFields.time: timeCreated.toIso8601String(),
+    accountsFields.lastSeenLocation: lastSeenLocation,
+    accountsFields.lastSeenTime: lastSeenTime.toIso8601String(),
+    accountsFields.needsHelp: needsHelp ? 1 : 0,
   };
 }

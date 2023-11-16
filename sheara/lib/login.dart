@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+//import 'mapScreen.dart';
+import 'homepage.dart';
 import 'registration.dart';
 import '../model/account.dart';
 import '../database/accountsDatabase.dart';
@@ -43,6 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (existingAccount != null) {
       _showSnackBar('Login successful! Welcome, ${existingAccount.dispname}!');
+      Navigator.pushReplacement(
+        context,
+        //MaterialPageRoute(builder: (context) => MapScreen(currentUser: existingAccount)),
+        MaterialPageRoute(builder: (context) => HomePage(currentUser: existingAccount)),
+      );
     } else {
       _showSnackBar('Invalid credentials. Please try again.');
     }
@@ -52,89 +59,136 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 100.0, horizontal: 50.0),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SingleChildScrollView(
+          // Wrap the Column with a SingleChildScrollView
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 20),
-              TextField(
-                controller: _idxController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: _selectedUserType == 'Student'
-                      ? 'Student ID'
-                      : 'Employee ID',
+              Image.asset('assets/girl.png'),
+              Container(
+                padding: const EdgeInsets.all(20.0),
+                margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: Colors.blueGrey,
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Column(
-                    children: [
-                      Radio(
-                        value: 'Student',
-                        groupValue: _selectedUserType,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedUserType = value.toString();
-                          });
-                        },
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        "Hi, I'm SHEARA!",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      Text('Student'),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Radio(
-                        value: 'Employee',
-                        groupValue: _selectedUserType,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedUserType = value.toString();
-                          });
-                        },
-                      ),
-                      Text('Employee'),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: _performLogin,
-                  child: Text('Login'),
-                ),
-              ),
-              SizedBox(height: 10),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("Don't have an account? ", style: TextStyle(color: Colors.black),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => RegistrationScreen()),
-                        );
-                      },
-                      child: Text("Register",style: TextStyle(color: Colors.blue,),),
+                    TextFormField(
+                      controller: _idxController,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        hintText: _selectedUserType == 'Student'
+                            ? 'Student ID'
+                            : 'Employee ID',
+                      ),
+                    ),
+                    /*const SizedBox(height: 10.0),
+                    TextFormField(
+
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        hintText: 'Enter Username',
+                      ),
+                    ), will update login page to include username sa credentials check*/
+                    const SizedBox(height: 10.0),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        hintText: 'Enter Password',
+                      ),
+                    ),
+                    const SizedBox(height: 10.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Column(
+                          children: [
+                            Radio(
+                              value: 'Student',
+                              groupValue: _selectedUserType,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedUserType = value.toString();
+                                });
+                              },
+                            ),
+                            Text('Student'),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Radio(
+                              value: 'Employee',
+                              groupValue: _selectedUserType,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedUserType = value.toString();
+                                });
+                              },
+                            ),
+                            Text('Employee'),
+                          ],
+                        ),
+                      ],
+                    ),
+                    ElevatedButton(
+                      onPressed: _performLogin,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      child: const Text('Log in'),
+                    ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Don't have an account? ", style: TextStyle(color: Colors.black),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => RegistrationScreen()),
+                              );
+                            },
+                            child: Text("Register",style: TextStyle(color: Colors.blue,),),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

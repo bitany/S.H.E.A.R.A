@@ -47,7 +47,10 @@ class accountsDatabase {
       ${accountsFields.firstname} $textType,
       ${accountsFields.lastname} $textType,
       ${accountsFields.dispname} $textType,
-      ${accountsFields.time} $textType
+      ${accountsFields.time} $textType,
+      ${accountsFields.lastSeenLocation} $textType,
+      ${accountsFields.lastSeenTime} $textType,
+      ${accountsFields.needsHelp} $boolType
     )
   ''');
   }
@@ -141,6 +144,9 @@ class accountsDatabase {
         lastname: maps[i][accountsFields.lastname],
         dispname: maps[i][accountsFields.dispname],
         timeCreated: DateTime.parse(maps[i][accountsFields.time]),
+        lastSeenLocation: maps[i][accountsFields.lastSeenLocation],
+        lastSeenTime: DateTime.parse(maps[i][accountsFields.lastSeenTime]),
+        needsHelp: maps[i][accountsFields.needsHelp],
       );
     });
   }
