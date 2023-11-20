@@ -81,6 +81,9 @@ flutter:
     - assets/video.png
     - assets/microphone.png
     - assets/chat.png
+    - assets/animal.gif
+    - assets/icon.png
+    - assets/snake_button.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
