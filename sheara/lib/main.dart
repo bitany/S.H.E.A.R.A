@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginScreen(),
         //'/send_sos': (context) => SendSOSPage(),
-        '/register': (context) => RegistrationScreen(), // Add registration route
+        '/register': (context) =>
+            RegistrationScreen(), // Add registration route
       },
     );
   }
@@ -49,7 +50,7 @@ class MyAppHomePage extends StatelessWidget {
                 Transform.scale(
                   scale: 1.5,
                   child: Image.asset(
-                    'assets/hi.gif',
+                    'assets/animal.gif',
                     width: 300,
                     height: 300,
                   ),

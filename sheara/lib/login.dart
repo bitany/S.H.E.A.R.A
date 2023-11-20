@@ -19,7 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _passwordController = TextEditingController();
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   Future<void> _performLogin() async {
@@ -41,20 +42,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
     bool isStudent = _selectedUserType == 'Student';
 
-    account? existingAccount = await accountsDatabase.instance.getAccount(idNumber, isStudent, password);
+    account? existingAccount = await accountsDatabase.instance
+        .getAccount(idNumber, isStudent, password);
 
     if (existingAccount != null) {
       _showSnackBar('Login successful! Welcome, ${existingAccount.dispname}!');
       Navigator.pushReplacement(
         context,
         //MaterialPageRoute(builder: (context) => MapScreen(currentUser: existingAccount)),
-        MaterialPageRoute(builder: (context) => HomePage(currentUser: existingAccount)),
+        MaterialPageRoute(
+            builder: (context) => HomePage(currentUser: existingAccount)),
       );
     } else {
       _showSnackBar('Invalid credentials. Please try again.');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,18 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset('assets/girl.png'),
+              Center(
+                child: Container(
+                  width: 200.0,
+                  height: 200.0,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/icon.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.all(20.0),
                 margin: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -177,16 +190,24 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Don't have an account? ", style: TextStyle(color: Colors.black),
+                          Text(
+                            "Don't have an account? ",
+                            style: TextStyle(color: Colors.black),
                           ),
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => RegistrationScreen()),
+                                MaterialPageRoute(
+                                    builder: (context) => RegistrationScreen()),
                               );
                             },
-                            child: Text("Register",style: TextStyle(color: Colors.blue,),),
+                            child: Text(
+                              "Register",
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ),
+                            ),
                           ),
                         ],
                       ),

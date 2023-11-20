@@ -28,7 +28,8 @@ class HomePageState extends State<HomePage> {
     super.initState();
     _mapController = MapController();
     _location = Location();
-    _currentLocation = LocationData.fromMap({'latitude': 10.640960, 'longitude': 122.237747});
+    _currentLocation =
+        LocationData.fromMap({'latitude': 10.640960, 'longitude': 122.237747});
 
     _location.onLocationChanged.listen((LocationData locationData) {
       setState(() {
@@ -39,16 +40,22 @@ class HomePageState extends State<HomePage> {
 
   void _zoomIn() {
     double currentZoom = _mapController.zoom;
-    _mapController.move(LatLng(_currentLocation.latitude!, _currentLocation.longitude!), currentZoom + 0.5);
+    _mapController.move(
+        LatLng(_currentLocation.latitude!, _currentLocation.longitude!),
+        currentZoom + 0.5);
   }
 
   void _zoomOut() {
     double currentZoom = _mapController.zoom;
-    _mapController.move(LatLng(_currentLocation.latitude!, _currentLocation.longitude!), currentZoom - 0.5);
+    _mapController.move(
+        LatLng(_currentLocation.latitude!, _currentLocation.longitude!),
+        currentZoom - 0.5);
   }
 
   void _centerOnMarker() {
-    _mapController.move(LatLng(_currentLocation.latitude!, _currentLocation.longitude!), _zoomLevel);
+    _mapController.move(
+        LatLng(_currentLocation.latitude!, _currentLocation.longitude!),
+        _zoomLevel);
   }
 
   void _toggleHelpStatus() async {
@@ -57,8 +64,7 @@ class HomePageState extends State<HomePage> {
 
     try {
       await accountsDatabase.instance.update(widget.currentUser);
-      setState(() {
-      });
+      setState(() {});
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Help status updated!'),
       ));
@@ -81,7 +87,8 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Color(int.parse(navColor)),
         centerTitle: true,
-        title: Text(widget.currentUser.dispname), // Replace with the user's actual username
+        title: Text(widget
+            .currentUser.dispname), // Replace with the user's actual username
         leading: IconButton(
           icon: Icon(Icons.account_circle),
           onPressed: () {
@@ -154,9 +161,9 @@ class HomePageState extends State<HomePage> {
                     child: Transform.scale(
                       scale: 1.5,
                       child: Image.asset(
-                        'assets/red_button.png',
-                        width: 70,
-                        height: 70,
+                        'assets/snake_button.png',
+                        width: 150,
+                        height: 150,
                       ),
                     ),
                   ),
@@ -186,28 +193,28 @@ class HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CircleButton(
-                color: Colors.red,
+                color: Color.fromARGB(255, 10, 10, 10),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
               ),
               // Add other colored buttons here with their respective logic
               CircleButton(
-                color: Colors.orange,
+                color: Color.fromARGB(255, 75, 75, 75),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
               ),
               CircleButton(
-                color: Colors.yellow,
+                color: Color.fromARGB(255, 115, 115, 115),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
               ),
               CircleButton(
-                color: Colors.blue,
+                color: Color.fromARGB(255, 153, 153, 153),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
               ),
               CircleButton(
-                color: Colors.green,
+                color: const Color.fromARGB(255, 190, 190, 190),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
               ),

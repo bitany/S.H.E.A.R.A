@@ -74,7 +74,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset('assets/girl.png'),
+              Center(
+                child: Container(
+                  width: 200.0,
+                  height: 200.0,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/icon.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.all(20.0),
                 margin: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -213,27 +224,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         String idx = _idxController.text;
                         String displayName = _displayNameController.text;
                         String password = _passwordController.text;
-                        String confirmPassword = _confirmPasswordController.text;
+                        String confirmPassword =
+                            _confirmPasswordController.text;
                         int? idNumber;
                         idNumber = int.parse(idx);
 
-                        if (idx.isEmpty || displayName.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill out all the fields.')));
+                        if (idx.isEmpty ||
+                            displayName.isEmpty ||
+                            password.isEmpty ||
+                            confirmPassword.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Please fill out all the fields.')));
                           return;
                         }
 
                         if ((idNumber == null) || (idNumber <= 0)) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invalid ID number.')));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Invalid ID number.')));
                           return;
                         }
 
                         if (password != confirmPassword) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('The passwords do not match. Please try again.')));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  'The passwords do not match. Please try again.')));
                           return;
                         }
 
                         Location location = Location();
-                        LocationData? userLocation = await location.getLocation();
+                        LocationData? userLocation =
+                            await location.getLocation();
 
                         account newAccount = account(
                           idNumber: idNumber,
@@ -243,23 +264,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isAuthenticated: false,
                           isStudent: _isStudent,
                           timeCreated: DateTime.now(),
-                          lastSeenLocation: "${userLocation.latitude}, ${userLocation.longitude}",
+                          lastSeenLocation:
+                              "${userLocation.latitude}, ${userLocation.longitude}",
                           lastSeenTime: DateTime.now(),
                           needsHelp: false,
                         );
 
                         try {
                           await accountsDatabase.instance.create(newAccount);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Account created successfully!')));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('Account created successfully!')));
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
                           );
                         } catch (e) {
-                          if (e is DatabaseException && e.isUniqueConstraintError()) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sorry, this ID number is already registered.')));
+                          if (e is DatabaseException &&
+                              e.isUniqueConstraintError()) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'Sorry, this ID number is already registered.')));
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sorry, something went wrong while creating your account. Error: $e')));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'Sorry, something went wrong while creating your account. Error: $e')));
                           }
                         }
                       },
