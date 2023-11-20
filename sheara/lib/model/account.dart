@@ -3,7 +3,7 @@ final String accountsTable = 'accounts';
 
 class accountsFields {
   static final List<String> values = [
-    id, password, isAuthenticated, isStudent,  idNumber, firstname, lastname, dispname, time, lastSeenLocation, lastSeenTime, needsHelp
+    id, password, isAuthenticated, isStudent,  idNumber, firstname, lastname, dispname, favColor, time, lastSeenLocation, lastSeenTime, needsHelp
   ];
   static final String id = '_id';
   static final String password = 'password';
@@ -12,7 +12,8 @@ class accountsFields {
   static final String idNumber = 'idNumber';
   static final String firstname = 'firstName';
   static final String lastname = 'lastname';
-  static final String dispname = 'displayName';
+  static final String dispname = 'dispname';
+  static final String favColor = 'favColor';
   static final String time = 'time';
   static final String lastSeenLocation = 'lastSeenLocation';
   static final String lastSeenTime = 'lastSeenTime';
@@ -28,6 +29,7 @@ class account {
   String firstname;
   String lastname;
   String dispname;
+  String favColor;
   final DateTime timeCreated;
   String lastSeenLocation;
   DateTime lastSeenTime;
@@ -50,6 +52,7 @@ class account {
     this.firstname = '',
     this.lastname = '',
     required this.dispname,
+    required this.favColor,
     required this.timeCreated,
     required this.lastSeenLocation,
     required this.lastSeenTime,
@@ -66,6 +69,7 @@ class account {
     String? firstname,
     String? lastname,
     String? dispname,
+    String? favColor,
     DateTime? timeCreated,
     String? lastSeenLocation,
     DateTime? lastSeenTime,
@@ -80,6 +84,7 @@ class account {
       firstname: firstname ?? this.firstname,
       lastname: lastname ?? this.lastname,
       dispname: dispname ?? this.dispname,
+      favColor: favColor ?? this.favColor,
       timeCreated: timeCreated ?? this.timeCreated,
       lastSeenLocation: lastSeenLocation ?? this.lastSeenLocation,
       lastSeenTime: lastSeenTime ?? this.lastSeenTime,
@@ -95,6 +100,7 @@ class account {
     firstname: json[accountsFields.firstname] as String,
     lastname: json[accountsFields.lastname] as String,
     dispname: json[accountsFields.dispname] as String,
+    favColor: json[accountsFields.favColor] as String,
     timeCreated: DateTime.parse(json[accountsFields.time] as String),
     lastSeenLocation: json[accountsFields.lastSeenLocation] as String,
     lastSeenTime: DateTime.parse(json[accountsFields.lastSeenTime] as String),
@@ -110,6 +116,7 @@ class account {
     accountsFields.firstname: firstname,
     accountsFields.lastname: lastname,
     accountsFields.dispname: dispname,
+    accountsFields.favColor: favColor,
     accountsFields.time: timeCreated.toIso8601String(),
     accountsFields.lastSeenLocation: lastSeenLocation,
     accountsFields.lastSeenTime: lastSeenTime.toIso8601String(),

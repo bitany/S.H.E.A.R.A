@@ -1,3 +1,4 @@
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -17,6 +18,40 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController _displayNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
+  Color pickerColor = Color(0xff443a49);
+  Color currentColor = Color(0xff443a49);
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
+
+  Future<void> _showColorPicker() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pick your preferred color!'),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: pickerColor,
+              onColorChanged: changeColor,
+              showLabel: true,
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Text('Submit color'),
+              onPressed: () {
+                setState(() => currentColor = pickerColor);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+    return Future.value();
+  }
 
   void _navigateToLoginScreen() {
     Navigator.push(
@@ -118,6 +153,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       textAlign: TextAlign.center, // Center-align the text
                     ),
                     const SizedBox(height: 5.0),
+                    GestureDetector(
+                      onTap: () async {
+                        await _showColorPicker();
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 50.0),
+                            child: Text(
+                              'Pick a Color',
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 50,
+                            color: currentColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
@@ -181,6 +238,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         account newAccount = account(
                           idNumber: idNumber,
                           dispname: displayName,
+                          favColor: currentColor.toString(),
                           password: password,
                           isAuthenticated: false,
                           isStudent: _isStudent,

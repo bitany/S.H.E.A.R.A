@@ -1,42 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
+import '../database/accountsDatabase.dart';
+import '../model/account.dart';
 
 class SendSOSPage extends StatefulWidget {
+  final account currentUser;
+  SendSOSPage({required this.currentUser});
+
   @override
   _SendSOSPageState createState() => _SendSOSPageState();
 }
 
 class _SendSOSPageState extends State<SendSOSPage> {
-  String userLocation = "Location not available";
+  late MapController _mapController;
+  late LocationData _currentLocation;
+  double _zoomLevel = 16;
+  late Location _location;
 
-  Future<void> getUserLocation() async {
-    /*try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+  @override
+  void initState() {
+    super.initState();
+    _mapController = MapController();
+    _location = Location();
+    _currentLocation = LocationData.fromMap({'latitude': 10.640960, 'longitude': 122.237747});
+
+    _location.onLocationChanged.listen((LocationData locationData) {
       setState(() {
-        userLocation =
-        "Latitude: ${position.latitude}, Longitude: ${position.longitude}";
+        _currentLocation = locationData;
       });
-    } catch (e) {
-      print(e.toString());
-    }*/
-  }
-
-  int _currentIndex = 0;
-
-  void onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
     });
   }
 
-  @override
   Widget build(BuildContext context) {
+    String uColor1 = widget.currentUser.favColor;
+    String remove1 = 'Color(';
+    String uColor2 = uColor1.replaceAll(remove1, '');
+    String remove2 = ')';
+    String navColor = uColor2.replaceAll(remove2, '');
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(int.parse(navColor)),
         automaticallyImplyLeading: false,
         title: Text('Send SOS'),
-        backgroundColor: Colors.blueGrey[400],
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.account_circle),
@@ -47,7 +54,7 @@ class _SendSOSPageState extends State<SendSOSPage> {
           Expanded(
             child: Center(
               child: Text(
-                'Username', // Replace with the actual username
+                widget.currentUser.dispname, // Replace with the actual username
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -72,30 +79,37 @@ class _SendSOSPageState extends State<SendSOSPage> {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Share Your Location:',
-              style: TextStyle(fontSize: 24),
-            ),
-            Text(
-              userLocation,
-              style: TextStyle(fontSize: 16),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                getUserLocation();
-              },
-              child: Text('Get Location'),
-            ),
-          ],
+      body: FlutterMap(
+        mapController: _mapController,
+        options: MapOptions(
+          center: LatLng(_currentLocation.latitude!, _currentLocation.longitude!),
+          zoom: _zoomLevel,
+          minZoom: 10.0,
+          maxZoom: 18,
         ),
+        layers: [
+          TileLayerOptions(
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            subdomains: ['a', 'b', 'c'],
+          ),
+          MarkerLayerOptions(
+            markers: [
+              Marker(
+                width: 40.0,
+                height: 40.0,
+                point: LatLng(_currentLocation.latitude!, _currentLocation.longitude!),
+                builder: (ctx) => Container(
+                  child: Icon(
+                    Icons.location_pin,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: onTabTapped,
         selectedItemColor: Colors.red[300],
         unselectedItemColor: Colors.black,
         items: [

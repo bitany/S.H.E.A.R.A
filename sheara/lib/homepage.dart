@@ -60,7 +60,7 @@ class HomePageState extends State<HomePage> {
       setState(() {
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Help status updated successfully!'),
+        content: Text('Help status updated!'),
       ));
     } catch (e) {
       print('Error updating help status: $e');
@@ -72,11 +72,16 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String uColor1 = widget.currentUser.favColor;
+    String remove1 = 'Color(';
+    String uColor2 = uColor1.replaceAll(remove1, '');
+    String remove2 = ')';
+    String navColor = uColor2.replaceAll(remove2, '');
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 239, 202, 88),
+        backgroundColor: Color(int.parse(navColor)),
         centerTitle: true,
-        title: Text('Username'), // Replace with the user's actual username
+        title: Text(widget.currentUser.dispname), // Replace with the user's actual username
         leading: IconButton(
           icon: Icon(Icons.account_circle),
           onPressed: () {
@@ -182,54 +187,43 @@ class HomePageState extends State<HomePage> {
             children: [
               CircleButton(
                 color: Colors.red,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SendSOSPage()),
-                  );
-                },
+                onTap: () => navigateToSendSOSPage(context),
+                onToggleHelpStatus: _toggleHelpStatus,
               ),
               // Add other colored buttons here with their respective logic
               CircleButton(
                 color: Colors.orange,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SendSOSPage()),
-                  );
-                },
+                onTap: () => navigateToSendSOSPage(context),
+                onToggleHelpStatus: _toggleHelpStatus,
               ),
               CircleButton(
                 color: Colors.yellow,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SendSOSPage()),
-                  );
-                },
+                onTap: () => navigateToSendSOSPage(context),
+                onToggleHelpStatus: _toggleHelpStatus,
               ),
               CircleButton(
                 color: Colors.blue,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SendSOSPage()),
-                  );
-                },
+                onTap: () => navigateToSendSOSPage(context),
+                onToggleHelpStatus: _toggleHelpStatus,
               ),
               CircleButton(
                 color: Colors.green,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SendSOSPage()),
-                  );
-                },
+                onTap: () => navigateToSendSOSPage(context),
+                onToggleHelpStatus: _toggleHelpStatus,
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  void navigateToSendSOSPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SendSOSPage(currentUser: widget.currentUser),
+      ),
     );
   }
 }
@@ -253,13 +247,17 @@ class SquareButton extends StatelessWidget {
 class CircleButton extends StatelessWidget {
   final Color color;
   final Function()? onTap;
+  final Function()? onToggleHelpStatus;
 
-  CircleButton({required this.color, this.onTap});
+  CircleButton({required this.color, this.onTap, this.onToggleHelpStatus});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        onTap?.call();
+        onToggleHelpStatus?.call();
+      },
       child: Container(
         width: 70,
         height: 40,
