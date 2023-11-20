@@ -188,7 +188,7 @@ class HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 50,
+          height: 120,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -196,27 +196,32 @@ class HomePageState extends State<HomePage> {
                 color: Color.fromARGB(255, 10, 10, 10),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
+                buttonText: 'Critical',
               ),
               // Add other colored buttons here with their respective logic
               CircleButton(
-                color: Color.fromARGB(255, 75, 75, 75),
+                color: Color.fromARGB(255, 42, 42, 42),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
+                buttonText: 'High',
               ),
               CircleButton(
                 color: Color.fromARGB(255, 115, 115, 115),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
+                buttonText: 'Medium',
               ),
               CircleButton(
                 color: Color.fromARGB(255, 153, 153, 153),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
+                buttonText: 'Low',
               ),
               CircleButton(
                 color: const Color.fromARGB(255, 190, 190, 190),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
+                buttonText: 'Advisory',
               ),
             ],
           ),
@@ -253,10 +258,15 @@ class SquareButton extends StatelessWidget {
 
 class CircleButton extends StatelessWidget {
   final Color color;
+  final String buttonText;
   final Function()? onTap;
   final Function()? onToggleHelpStatus;
 
-  CircleButton({required this.color, this.onTap, this.onToggleHelpStatus});
+  CircleButton(
+      {required this.color,
+      this.onTap,
+      this.onToggleHelpStatus,
+      required this.buttonText});
 
   @override
   Widget build(BuildContext context) {
@@ -266,13 +276,25 @@ class CircleButton extends StatelessWidget {
         onToggleHelpStatus?.call();
       },
       child: Container(
-        width: 70,
-        height: 40,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.rectangle,
-        ),
-      ),
+          width: 72,
+          height: 70,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.rectangle,
+          ),
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.all(2),
+              child: Text(
+                buttonText,
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 223, 28, 14), // Text color
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16, // Text font size
+                ),
+              ),
+            ),
+          )),
     );
   }
 }
