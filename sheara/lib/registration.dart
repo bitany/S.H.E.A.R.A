@@ -32,11 +32,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return AlertDialog(
           title: Text('Pick your preferred color!'),
           content: SingleChildScrollView(
+
             child: ColorPicker(
               pickerColor: pickerColor,
               onColorChanged: changeColor,
               showLabel: true,
             ),
+
+            /*
+            child: SlidePicker(
+              pickerColor: pickerColor,
+              onColorChanged: changeColor,
+              colorModel: ColorModel.rgb,
+              enableAlpha: false,
+              displayThumbColor:true,
+              showParams: true,
+              showIndicator: true,
+              indicatorBorderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
+            )
+            */
+            /*
+            child: HueRingPicker(
+              pickerColor: pickerColor,
+              onColorChanged: changeColor,
+              enableAlpha: false,
+              displayThumbColor: true,
+            ),
+            */
           ),
           actions: <Widget>[
             ElevatedButton(
