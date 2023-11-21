@@ -148,7 +148,7 @@ class accountsDatabase {
         timeCreated: DateTime.parse(maps[i][accountsFields.time]),
         lastSeenLocation: maps[i][accountsFields.lastSeenLocation],
         lastSeenTime: DateTime.parse(maps[i][accountsFields.lastSeenTime]),
-        needsHelp: maps[i][accountsFields.needsHelp],
+        needsHelp: maps[i][accountsFields.needsHelp] == 0,
       );
     });
   }
