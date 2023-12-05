@@ -193,32 +193,32 @@ class HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CircleButton(
-                color: Color.fromARGB(255, 10, 10, 10),
+                color: Color.fromARGB(255, 222, 11, 11),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'Critical',
               ),
               // Add other colored buttons here with their respective logic
               CircleButton(
-                color: Color.fromARGB(255, 42, 42, 42),
+                color: Color.fromARGB(255, 226, 105, 5),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'High',
               ),
               CircleButton(
-                color: Color.fromARGB(255, 115, 115, 115),
+                color: Color.fromARGB(255, 224, 192, 8),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'Medium',
               ),
               CircleButton(
-                color: Color.fromARGB(255, 153, 153, 153),
+                color: Color.fromARGB(255, 59, 200, 8),
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'Low',
               ),
               CircleButton(
-                color: const Color.fromARGB(255, 190, 190, 190),
+                color: Colors.blue,
                 onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'Advisory',
@@ -288,7 +288,7 @@ class CircleButton extends StatelessWidget {
               child: Text(
                 buttonText,
                 style: TextStyle(
-                  color: const Color.fromARGB(255, 223, 28, 14), // Text color
+                  color: Color.fromARGB(255, 0, 0, 0), // Text color
                   fontWeight: FontWeight.bold,
                   fontSize: 16, // Text font size
                 ),
