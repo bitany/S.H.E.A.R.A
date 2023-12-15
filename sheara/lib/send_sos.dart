@@ -79,31 +79,37 @@ class _SendSOSPageState extends State<SendSOSPage> {
           ),
         ],
       ),
-      body: FlutterMap(
-        mapController: _mapController,
-        options: MapOptions(
-          center: LatLng(_currentLocation.latitude!, _currentLocation.longitude!),
-          zoom: _zoomLevel,
-          minZoom: 10.0,
-          maxZoom: 18,
-        ),
-        layers: [
-          TileLayerOptions(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: ['a', 'b', 'c'],
-          ),
-          MarkerLayerOptions(
-            markers: [
-              Marker(
-                width: 40.0,
-                height: 40.0,
-                point: LatLng(_currentLocation.latitude!, _currentLocation.longitude!),
-                builder: (ctx) => Container(
-                  child: Icon(
-                    Icons.location_pin,
-                    color: Colors.red,
-                  ),
-                ),
+      body: Stack(
+        children: [
+          FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              center: LatLng(_currentLocation.latitude!, _currentLocation.longitude!),
+              zoom: _zoomLevel,
+              minZoom: 10.0,
+              maxZoom: 18,
+            ),
+            children: [
+              TileLayer(
+                // urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate: 'https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+                // urlTemplate: 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg',
+                // urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                // urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.example.app',
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    width: 40.0,
+                    height: 40.0,
+                    point: LatLng(_currentLocation.latitude!, _currentLocation.longitude!),
+                    child: Icon(
+                      Icons.location_pin,
+                      color: Colors.red,
+                    ),
+                  )
+                ],
               ),
             ],
           ),
