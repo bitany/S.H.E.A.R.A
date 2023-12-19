@@ -1,3 +1,4 @@
+import 'package:latlong2/latlong.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/helpSignal.dart';
@@ -9,12 +10,10 @@ class helpSignalsDatabase {
 
   helpSignalsDatabase._init();
 
-
-
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('accounts.db');
+    _database = await _initDB('helpSignals.db');
     return _database!;
   }
 
@@ -36,26 +35,37 @@ class helpSignalsDatabase {
   Future _createDB(Database db, int version) async {
     const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const textType = 'TEXT NOT NULL';
-    const boolType = 'BOOLEAN NOT NULL';
     const integerType = 'INTEGER';
 
     await db.execute('''
     CREATE TABLE $signalsTable ( 
       ${signalsFields.id} $idType,
-      PRIMARY KEY(${signalsFields.id},
-      ${signalsFields.displayName} $textType,
-      ${signalsFields.values[1]} ${integerType},
-      lastSeenLocations TEXT NOT NULL,
-      )
+      ${signalsFields.victimName} $textType,
+      ${signalsFields.urgencyLevel} $integerType,
+      ${signalsFields.lastSeenLocation} $textType
     )
   ''');
   }
 
-  Future<helpSignal> create(helpSignal account) async {
+  Future<helpSignal> create(helpSignal helpSignal) async {
     final db = await instance.database;
-    final id = await db.insert(signalsTable, account.toJson());
+    final id = await db.insert(signalsTable, helpSignal.toJson());
 
-    return account.copy(id: id);
+    return helpSignal.copy(id: id);
+  }
+
+  Future<List<helpSignal>> getAllHelpSignals() async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db.query(signalsTable);
+
+    return List.generate(maps.length, (i) {
+      return helpSignal(
+        id: maps[i][signalsFields.id],
+        victimName: maps[i][signalsFields.victimName],
+        urgencyLevel: UrgencyLevel.values[maps[i]['urgencyLevel']],
+        lastSeenLocation: maps[i][signalsFields.lastSeenLocation],
+      );
+    });
   }
 
   Future<void> close() async {

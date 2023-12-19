@@ -3,7 +3,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import '../database/accountsDatabase.dart';
+import '../database/signalsDatabase.dart';
 import '../model/account.dart';
+import '../model/helpSignal.dart';
 import 'about_page.dart';
 import 'guide.dart';
 import 'send_sos.dart';
@@ -17,15 +19,19 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
+//late helpSignalsDatabase helpSignalsDB;
+
 class HomePageState extends State<HomePage> {
   late MapController _mapController;
   late LocationData _currentLocation;
   double _zoomLevel = 16;
   late Location _location;
+  late String urgency;
 
   @override
   void initState() {
     super.initState();
+    //helpSignalsDB = helpSignalsDatabase.instance;
     _mapController = MapController();
     _location = Location();
     _currentLocation =
@@ -194,34 +200,34 @@ class HomePageState extends State<HomePage> {
             children: [
               CircleButton(
                 color: Color.fromARGB(255, 222, 11, 11),
-                onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'Critical',
+                onTap: () => navigateToSendSOSPage(context, 4),
               ),
               // Add other colored buttons here with their respective logic
               CircleButton(
                 color: Color.fromARGB(255, 226, 105, 5),
-                onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'High',
+                onTap: () => navigateToSendSOSPage(context, 3),
               ),
               CircleButton(
                 color: Color.fromARGB(255, 224, 192, 8),
-                onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'Medium',
+                onTap: () => navigateToSendSOSPage(context, 2),
               ),
               CircleButton(
                 color: Color.fromARGB(255, 59, 200, 8),
-                onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'Low',
+                onTap: () => navigateToSendSOSPage(context, 1),
               ),
               CircleButton(
                 color: Colors.blue,
-                onTap: () => navigateToSendSOSPage(context),
                 onToggleHelpStatus: _toggleHelpStatus,
                 buttonText: 'Advisory',
+                onTap: () => navigateToSendSOSPage(context, 0),
               ),
             ],
           ),
@@ -230,14 +236,37 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  void navigateToSendSOSPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SendSOSPage(currentUser: widget.currentUser),
-      ),
+  Future<void> navigateToSendSOSPage(BuildContext context, int urgencyLevel) async {
+    Location location = Location();
+    LocationData? userLocation =
+    await location.getLocation();
+
+    helpSignal newSignal = helpSignal(
+        victimName: widget.currentUser.dispname,
+        urgencyLevel: UrgencyLevel.values[urgencyLevel],
+        lastSeenLocation:
+          "${userLocation.latitude}, ${userLocation.longitude}",
     );
+    try {
+      await helpSignalsDatabase.instance.create(newSignal);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Help status updated!')));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SendSOSPage(currentUser: widget.currentUser),
+        ),
+      );
+    }
+
+    catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                'Sorry, something went wrong while asking for help. Error: $e')));
+      }
   }
+
+
 }
 
 class SquareButton extends StatelessWidget {

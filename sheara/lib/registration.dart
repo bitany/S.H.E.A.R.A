@@ -301,7 +301,8 @@
                               MaterialPageRoute(
                                   builder: (context) => LoginScreen()),
                             );
-                          } catch (e) {
+                          }
+                          catch (e) {
                             if (e is DatabaseException &&
                                 e.isUniqueConstraintError()) {
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(

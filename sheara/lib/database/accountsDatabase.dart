@@ -16,6 +16,13 @@ class accountsDatabase {
     return _database!;
   }
 
+  Future<bool> isDatabaseEmpty() async {
+    final db = await instance.database;
+    final count = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $accountsTable'));
+
+    return count == 0;
+  }
+
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);

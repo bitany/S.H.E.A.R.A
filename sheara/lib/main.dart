@@ -1,11 +1,59 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'database/accountsDatabase.dart';
+import 'database/signalsDatabase.dart';
+import 'model/account.dart';
+import 'model/helpSignal.dart';
 import 'login.dart';
 import 'registration.dart';
 import 'mapScreen.dart';
 
 //hello
-void main() => runApp(MaterialApp(home: MyApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  bool isDatabaseEmpty = await accountsDatabase.instance.isDatabaseEmpty();
+
+  // If the database is empty, add dummy accounts
+  if (isDatabaseEmpty) {
+    List<account> dummyAccounts = [
+      account(
+        idNumber: 2019,
+        dispname: "Hadjie",
+        favColor: "Color(0xFFFF0000)",
+        password: "1111",
+        isAuthenticated: false,
+        isStudent: true,
+        timeCreated: DateTime.now(),
+        lastSeenLocation:
+        "${10.6407}, ${122.2274}",
+        lastSeenTime: DateTime.now(),
+        needsHelp: false,
+      ),
+      account(
+        idNumber: 2020,
+        dispname: "Lamao",
+        favColor: "Color(0xFFFF1111)",
+        password: "1111",
+        isAuthenticated: false,
+        isStudent: true,
+        timeCreated: DateTime.now(),
+        lastSeenLocation:
+        "${10.6407}, ${122.2330}",
+        lastSeenTime: DateTime.now(),
+        needsHelp: false,
+      ),
+    ];
+
+    for (var dummyAccount in dummyAccounts) {
+      await accountsDatabase.instance.create(dummyAccount);
+    }
+  }
+  // Dummy accounts
+
+
+  runApp(MaterialApp(home: MyApp()));
+}
 
 class MyApp extends StatelessWidget {
   @override
