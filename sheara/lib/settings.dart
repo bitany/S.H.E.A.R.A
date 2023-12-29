@@ -70,10 +70,17 @@ class Settings extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  color: Colors.grey[700],
+                  color: Color.fromARGB(192, 32, 64, 95), //changed color
                   padding: const EdgeInsets.all(10.0),
-                  child: const Column(
+                  child: Column(
                     children: <Widget>[
+                      const Text(
+                        "Personal Information",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                        ),
+                      ),
                       TextField(
                         decoration: InputDecoration(
                           labelText: "Student Number",
