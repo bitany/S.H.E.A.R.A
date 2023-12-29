@@ -1,101 +1,47 @@
 import 'package:flutter/material.dart';
-import 'settings.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Responder App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ResponderPage(),
+    );
+  }
+}
 
 class ResponderPage extends StatelessWidget {
-  const ResponderPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Responder"), // Removed Center widget
-        backgroundColor: Colors.grey,
-        actions: <Widget>[
+        backgroundColor: Color.fromARGB(255, 176, 53, 0),
+        title: Text(
+          'Notifications',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        actions: [
           IconButton(
-            icon: const Icon(Icons.settings_suggest_outlined),
+            icon: Icon(Icons.settings),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Settings()),
-              );
+              // Handle settings button press
             },
+            color: Color.fromARGB(
+                255, 199, 199, 199), // Replace with your custom color
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey,
-              ),
-              child: const Icon(
-                Icons.camera_alt_rounded,
-                color: Colors.green,
-              ),
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey,
-              ),
-              child: const Icon(
-                Icons.video_camera_front_rounded,
-                color: Colors.yellow,
-              ),
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey,
-              ),
-              child: const Icon(
-                Icons.person,
-                color: Colors.red,
-              ),
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey,
-              ),
-              child: const Icon(
-                Icons.mic_rounded,
-                color: Colors.orange,
-              ),
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey,
-              ),
-              child: const Icon(
-                Icons.message_rounded,
-                color: Colors.red,
-              ),
-            ),
-            label: "",
-          ),
-        ],
-      ),
+      body: Center(),
     );
   }
 }
